@@ -10,19 +10,26 @@ Simple Database Backup Tool
 
 ## CLI Usage
 
+### Scan
+* How to use the program via scan
+
+```
+go run ./cmd -scan 
+```
+
 ### Export
 
 * How to run the program
 
 ```
-go run ./cmd -source=<postgres/mysql> -export -user=<User Name> -db=<Database Name>
+go run ./cmd -source=<postgres/mysql/mssql> -export -user=<User Name> -db=<Database Name> -host=<Host> -port=<Port> -backupFilePath<Backup File Path> -backupName=<Backup Name> 
 ```
 ### Import
 
 * How to run the program
 
 ```
-go run ./cmd -source <postgres/mysql> -import -user=<User Name> -path=<File Path> 
+go run ./cmd -source=<postgres/mysql/mssql> -import -user=<User Name> -db=<Database Name> -host=<Host> -port=<Port> -backupFilePath<Backup File Path> -backupName=<Backup Name> 
 ```
 
 - *import*  
@@ -39,7 +46,7 @@ Default: false
 Flag: -source  
 Type: string  
 Default: null  
-Values: **mysql**, **postgres** 
+Values: **mysql**, **postgres**, **mssql** 
 
 - *user*  
 Flag: -user  
@@ -56,10 +63,30 @@ Flag: -db
 Type: string  
 Default: null
 
+- *host*  
+  Flag: -host  
+  Type: string  
+  Default: null
+
+- *port*  
+  Flag: -port  
+  Type: int  
+  Default: null
+
 - *binaryPath*  
 Flag: -binaryPath  
 Type: string  
 Default: null  
+
+- *backupName*  
+  Flag: -backupName  
+  Type: string  
+  Default: null
+
+- *backupFilePath*  
+  Flag: -backupFilePath  
+  Type: string  
+  Default: null
 
 ## API Usage
 * How to import database
@@ -75,14 +102,17 @@ import (
 
 func main() {
 	dd, err := dummydump.New(&config.Config{
-		// Init DummyDump
-		Source:     config.PostgreSQL,
-		Import:     true,
-		Export:     false,
-		User:       "<User>",
-		Path:       "<Path>",
-		DB:         "<DB>",
-		BinaryPath: "<Binary Path>",
+		Source:         <postgres\\mysql\\mssql>,
+		Import:         true,
+		Export:         false,
+		User:           <user>,
+		Password:       <password>,
+		DB:             <database name>,
+		Host:           <host>,
+		Port:           <port>,
+		BackupFilePath: <path where to save or retrieve>,
+		BackupName:     <backup name>,
+		BinaryPath:     <binary path>,
 	})
 
 	// Check error
@@ -94,7 +124,7 @@ func main() {
 	dd.Check().Import()
 }
 ```
-* How to import database
+* How to export database
 ```go
 
 package main
@@ -106,14 +136,17 @@ import (
 
 func main() {
 	dd, err := dummydump.New(&config.Config{
-		// Init DummyDump
-		Source:     config.PostgreSQL,
-		Import:     true,
-		Export:     false,
-		User:       "<User>",
-		Path:       "<Path>",
-		DB:         "<DB>",
-		BinaryPath: "<Binary Path>",
+		Source:         <postgres\\mysql\\mssql>,
+		Import:         false,
+		Export:         true,
+		User:           <user>,
+		Password:       <password>,
+		DB:             <database name>,
+		Host:           <host>,
+		Port:           <port>,
+		BackupFilePath: <path where to save or retrieve>,
+		BackupName:     <backup name>,
+		BinaryPath:     <binary path>,
 	})
 
 	// Check error
@@ -138,14 +171,17 @@ import (
 
 func main() {
 	dd, err := dummydump.New(&config.Config{
-		// Init DummyDump
-		Source:     config.PostgreSQL,
-		Import:     true,
-		Export:     false,
-		User:       "<User>",
-		Path:       "<Path>",
-		DB:         "<DB>",
-		BinaryPath: "<Binary Path>",
+		Source:         <postgres\\mysql\\mssql>,
+		Import:         false,
+		Export:         true,
+		User:           <user>,
+		Password:       <password>,
+		DB:             <database name>,
+		Host:           <host>,
+		Port:           <port>,
+		BackupFilePath: <path where to save or retrieve>,
+		BackupName:     <backup name>,
+		BinaryPath:     <binary path>,
 	})
 
 	// Check error

@@ -3,11 +3,8 @@ package internal
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"github.com/sadihakan/dummy-dump/config"
-	"io/ioutil"
 	"os"
-	"time"
 )
 
 const (
@@ -34,21 +31,28 @@ func (m MySQL) Check() error {
 	return nil
 }
 
+func (m MySQL) CheckPath(dump config.Config) error {
+	cmd := CreateCheckBinaryPathCommand(dump)
+	var out, errBuf bytes.Buffer
+	cmd.Stdout = &out
+	cmd.Stderr = &errBuf
+	err := cmd.Run()
+	if err != nil {
+		return errors.New("mysql path does not located")
+	}
+	return nil
+}
+
 func (m MySQL) Export(dump config.Config) error {
-	filename := fmt.Sprintf("%d.backup", time.Now().UTC().UnixNano())
-	cmd := CreateExportCommand(dump)
-	fmt.Println(cmd)
+	cmd:= CreateExportCommand(dump)
 	var outb, errBuf bytes.Buffer
 	cmd.Stderr = &errBuf
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = &outb
-	err := cmd.Run()
-	if err != nil {
+	if err := cmd.Run(); err != nil {
 		return errors.New(errBuf.String())
 	}
-
-	err = ioutil.WriteFile(filename, outb.Bytes(), 0644)
-	return err
+	return nil
 }
 
 func (m MySQL) Import(dump config.Config) error {

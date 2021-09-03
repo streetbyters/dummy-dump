@@ -7,12 +7,12 @@ import (
 	"os"
 )
 
-type Postgres struct {
+type Oracle struct {
 	Dump
 }
 
-func (p Postgres) Check() error {
-	cmd := CreateCheckBinaryCommand(config.PostgreSQL)
+func (o Oracle) Check() error {
+	cmd := CreateCheckBinaryCommand(config.Oracle)
 	var out, errBuf bytes.Buffer
 	cmd.Stdout = &out
 	cmd.Stderr = &errBuf
@@ -24,19 +24,19 @@ func (p Postgres) Check() error {
 	return nil
 }
 
-func (p Postgres) CheckPath(dump config.Config) error {
+func (o Oracle) CheckPath(dump config.Config) error {
 	cmd := CreateCheckBinaryPathCommand(dump)
 	var out, errBuf bytes.Buffer
 	cmd.Stdout = &out
 	cmd.Stderr = &errBuf
 	err := cmd.Run()
 	if err != nil {
-		return errors.New("psql path does not located")
+		return errors.New("oracle path does not located")
 	}
 	return nil
 }
 
-func (p Postgres) Export(dump config.Config) error {
+func (o Oracle) Export(dump config.Config) error {
 	var out, errBuf bytes.Buffer
 
 	cmd := CreateExportCommand(dump)
@@ -51,7 +51,7 @@ func (p Postgres) Export(dump config.Config) error {
 	return nil
 }
 
-func (p Postgres) Import(dump config.Config) error {
+func (o Oracle) Import(dump config.Config) error {
 	var out, errBuf bytes.Buffer
 
 	cmd := CreateImportCommand(dump)
